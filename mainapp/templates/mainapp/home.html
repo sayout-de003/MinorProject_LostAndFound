@@ -1,0 +1,17 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">Welcome to the Lost & Found System</h1>
+    <p class="lead">Easily report lost or found items and find matches instantly!</p>
+
+    <div class="mt-4">
+        <a href="{% url 'upload_item_lost' %}" class="btn btn-primary btn-lg me-3">Report Lost Item</a>
+        <a href="{% url 'upload_item_found' %}" class="btn btn-success btn-lg">Report Found Item</a>
+    </div>
+
+    <div class="mt-5">
+        <img src="https://source.unsplash.com/800x400/?lost,found" class="img-fluid rounded shadow" alt="Lost and Found">
+    </div>
+</div>
+{% endblock %}

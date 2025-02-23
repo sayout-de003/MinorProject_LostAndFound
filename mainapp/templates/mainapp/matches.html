@@ -1,0 +1,16 @@
+{% extends "mainapp/base.html" %}
+{% block content %}
+<h2>Matching Results</h2>
+{% if matches %}
+    <ul>
+    {% for match in matches %}
+        <li>
+            <img src="{{ match.match.image.url }}" width="100">
+            <p>{{ match.match.name }} - Score: {{ match.score|floatformat:2 }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No matches found.</p>
+{% endif %}
+{% endblock %}
