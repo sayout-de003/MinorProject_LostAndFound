@@ -46,3 +46,25 @@ class ItemLostForm(BaseItemForm):
 class ItemFoundForm(BaseItemForm):
     class Meta(BaseItemForm.Meta):
         model = ItemFound
+
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import CustomUser
+
+class SignupForm(UserCreationForm):
+    """Form for user registration."""
+    email = forms.EmailField(required=True)
+    profile_picture = forms.ImageField(required=False)
+    contact_number = forms.CharField(max_length=15, required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password1', 'password2', 'profile_picture', 'contact_number']
+
+
+class LoginForm(forms.Form):
+    """Form for user login."""
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput)

@@ -17,16 +17,76 @@ def home(request):
     return render(request, 'mainapp/home.html')
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import CustomUser
+from .forms import SignupForm, LoginForm
+
+def signup(request):
+    """Handles user registration."""
+    if request.method == "POST":
+        form = SignupForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)
+            messages.success(request, "Signup successful!")
+            return redirect('home')
+        else:
+            messages.error(request, "Error in signup. Please check the form.")
+    else:
+        form = SignupForm()
+    
+    return render(request, 'mainapp/signup.html', {'form': form})
+
+
+def login(request):
+    """Handles user login."""
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                auth_login(request, user)
+                messages.success(request, "Login successful!")
+                return redirect('home')
+            else:
+                messages.error(request, "Invalid credentials. Please try again.")
+    else:
+        form = LoginForm()
+
+    return render(request, 'mainapp/login.html', {'form': form})
+
+
+@login_required
+def logout(request):
+    """Handles user logout."""
+    auth_logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect('home')
+
+@login_required
 def upload_item_lost(request):
     """Handles uploading lost items."""
     if request.method == "POST":
         form = ItemLostForm(request.POST, request.FILES)
         if form.is_valid():
-            item = form.save()
+            item = form.save(commit=False)  # Prevent immediate saving
+            # item.user = CustomUser.objects.get(id=request.user.id)  # Assign the logged-in user
+            item.user = get_object_or_404(CustomUser, id=request.user.id)
+            print(type(request.user))  # Check if it’s <class 'mainapp.models.CustomUser'> or <class 'django.contrib.auth.models.User'>
+
+
+            item.save()
+
 
             # Auto-generate a description if none is provided
             if not item.description:
                 item.description = generate_ai_description(item.image.path)
+                
                 item.save()
 
             # Store image features for search
@@ -47,13 +107,18 @@ def upload_item_lost(request):
         form = ItemLostForm()
     return render(request, 'mainapp/upload_lost.html', {'form': form})
 
-
+@login_required
 def upload_item_found(request):
     """Handles uploading found items."""
     if request.method == "POST":
         form = ItemFoundForm(request.POST, request.FILES)
         if form.is_valid():
-            item = form.save()
+            item = form.save(commit=False)  # Prevent immediate saving
+            item.user = get_object_or_404(CustomUser, id=request.user.id)
+  # Assign the logged-in user
+            print(type(request.user))  # Check if it’s <class 'mainapp.models.CustomUser'> or <class 'django.contrib.auth.models.User'>
+
+            item.save()
 
             # Auto-generate a description if none is provided
             if not item.description:

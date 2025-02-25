@@ -134,3 +134,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'desayantan1947@gmail.com'
 EMAIL_HOST_PASSWORD = 'S@de30112003'
 DEFAULT_FROM_EMAIL = 'system@example.com'
+
+AUTH_USER_MODEL = 'mainapp.CustomUser'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
