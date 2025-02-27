@@ -1,9 +1,70 @@
+
+
 {% extends "mainapp/base.html" %}
 {% block content %}
-<h2>Report Found Item</h2>
+<h2>Report Lost Item</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+
+    <!-- Auto-Fill Buttons -->
+    <button type="button" id="auto-fill-description">Auto-Fill Description</button>
+    <button type="button" id="auto-fill-location">Auto-Fill Location</button>
+
     <button type="submit">Submit</button>
 </form>
+
+<script>
+document.getElementById("auto-fill-description").addEventListener("click", function() {
+    const imageInput = document.querySelector("input[type='file']");
+    if (imageInput.files.length === 0) {
+        alert("Please upload an image first.");
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append("image", imageInput.files[0]);
+
+    fetch("{% url 'generate_description' %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.description) {
+            document.querySelector("textarea[name='description']").value = data.description;
+        } else {
+            alert("Failed to generate description.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+document.getElementById("auto-fill-location").addEventListener("click", function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            fetch(`{% url 'get_location' %}?lat=${lat}&lon=${lon}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.address) {
+                    document.querySelector("input[name='latitude']").value = lat;
+                    document.querySelector("input[name='longitude']").value = lon;
+                    document.querySelector("input[name='address']").value = data.address;
+                } else {
+                    alert("Failed to fetch location.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }, () => alert("Location access denied."));
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+});
+</script>
 {% endblock %}

@@ -69,11 +69,16 @@ def store_image_features(image_path, model=None):
 
 
 # Search Similar Images
-def search_similar_images(image_path, model, k=5):
+# Search Similar Images
+def search_similar_images(image_path, model=None, k=5):
+    if model is None:
+        model = load_model()  # Load the default model if not provided
+
     features = extract_features(image_path, model)
     index = initialize_faiss_index(features.shape[0])
     distances, indices = index.search(np.array([features]), k)
     return indices[0], distances[0]
+
 
 # Text Similarity Model
 text_model = SentenceTransformer('all-MiniLM-L6-v2')
