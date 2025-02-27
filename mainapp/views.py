@@ -68,7 +68,7 @@ def logout(request):
     messages.success(request, "You have been logged out.")
     return redirect('home')
 
-@login_required
+@login_required(login_url='login')
 def upload_item_lost(request):
     """Handles uploading lost items."""
     if request.method == "POST":
@@ -107,7 +107,7 @@ def upload_item_lost(request):
         form = ItemLostForm()
     return render(request, 'mainapp/upload_lost.html', {'form': form})
 
-@login_required
+@login_required(login_url='login')
 def upload_item_found(request):
     """Handles uploading found items."""
     if request.method == "POST":
@@ -143,7 +143,7 @@ def upload_item_found(request):
         form = ItemFoundForm()
     return render(request, 'mainapp/upload_found.html', {'form': form})
 
-
+@login_required(login_url='login')
 def match_items(request, item_id, item_type):
     """Matches lost items with found items."""
     if item_type == 'lost':
@@ -173,7 +173,7 @@ def match_items(request, item_id, item_type):
 
     return render(request, 'mainapp/matches.html', {'item': item, 'matches': matches})
 
-
+@login_required(login_url='login')
 def resolve_item(request, item_id, item_type):
     """Marks an item as resolved and removes it from the database."""
     if item_type == 'lost':
@@ -187,7 +187,7 @@ def resolve_item(request, item_id, item_type):
 
     return redirect('home')
 
-
+@login_required(login_url='login')
 def get_location(request):
     """Fetches an address based on latitude and longitude."""
     lat = request.GET.get("lat")
