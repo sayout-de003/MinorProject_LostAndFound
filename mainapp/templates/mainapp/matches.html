@@ -7,6 +7,8 @@
         <li>
             <img src="{{ match.match.image.url }}" width="100">
             <p>{{ match.match.name }} - Score: {{ match.score|floatformat:2 }}</p>
+            <p>Found by: {{ match.match.user.username }}</p>
+            <p>Contact: {{ match.match.user.email }}</p>
         </li>
     {% endfor %}
     </ul>
