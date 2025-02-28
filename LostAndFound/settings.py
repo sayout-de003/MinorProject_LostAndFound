@@ -118,6 +118,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -132,7 +137,7 @@ EMAIL_HOST = 'smtp.example.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'desayantan1947@gmail.com'
-EMAIL_HOST_PASSWORD = 'S@de30112003'
+EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = 'system@example.com'
 
 AUTH_USER_MODEL = 'mainapp.CustomUser'
