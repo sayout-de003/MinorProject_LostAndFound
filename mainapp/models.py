@@ -52,7 +52,8 @@ class BaseItem(models.Model):
 
 class ItemLost(BaseItem):
     """Model for lost items."""
-    pass
+    image = models.ImageField(upload_to='items/', blank=True, null=True)
+    
 
 
 class ItemFound(BaseItem):

@@ -17,7 +17,15 @@ from transformers import BlipProcessor, BlipForConditionalGeneration
 # Constants
 FAISS_INDEX_PATH = "image_features.index"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-GMAPS_API_KEY =  "AIzaSyDV__fcHGKtsviQcNHHsrz3veK2KGg8P3s"#googlemaps.Client(key="AIzaSyDV__fcHGKtsviQcNHHsrz3veK2KGg8P3s")  # Replace with actual API key
+# GMAPS_API_KEY =  "AIzaSyDV__fcHGKtsviQcNHHsrz3veK2KGg8P3s"#googlemaps.Client(key="AIzaSyDV__fcHGKtsviQcNHHsrz3veK2KGg8P3s")  # Replace with actual API key
+
+
+# # Use environment variables in settings
+# FAISS_INDEX_PATH = os.getenv("FAISS_INDEX_PATH", "default_index_path")
+# DEVICE = os.getenv("DEVICE", "cpu")
+
+GMAPS_API_KEY = "AIzaSyDV__fcHGKtsviQcNHHsrz3veK2KGg8P3s" #os.getenv("GMAPS_API_KEY")
+
 
 # Load FAISS index
 def initialize_faiss_index(dimension):

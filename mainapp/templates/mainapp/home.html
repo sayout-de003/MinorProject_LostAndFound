@@ -5,13 +5,92 @@
     <h1 class="mb-4">Welcome to the Lost & Found System</h1>
     <p class="lead">Easily report lost or found items and find matches instantly!</p>
 
+    <div class="mt-5">
+        <img src="https://source.unsplash.com/800x400/?lost,found" class="img-fluid rounded shadow" alt="Lost and Found">
+    </div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Terms & Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Welcome to the Lost & Found System. Before using our platform to report or search for lost and found items, please read and agree to the following terms:</p>
+
+                <h5>1. User Responsibilities</h5>
+                <ul>
+                    <li>You must provide accurate and truthful information when reporting lost or found items.</li>
+                    <li>Misuse of the platform, including false reporting, misleading claims, or fraudulent activity, is strictly prohibited.</li>
+                    <li>Any images or descriptions uploaded must not contain offensive, illegal, or inappropriate content.</li>
+                </ul>
+
+                <h5>2. Privacy & Data Usage</h5>
+                <ul>
+                    <li>The information you provide (excluding sensitive personal data) may be publicly visible to help users locate lost items.</li>
+                    <li>We do not sell or share your personal data with third parties, except as required by law.</li>
+                </ul>
+
+                <h5>3. No Guarantee of Recovery</h5>
+                <ul>
+                    <li>While our platform helps connect people with lost or found items, we do not guarantee successful recovery.</li>
+                    <li>We are not responsible for any lost, found, or exchanged items outside of our system.</li>
+                </ul>
+
+                <h5>4. User Conduct</h5>
+                <ul>
+                    <li>Respectful communication is expected at all times.</li>
+                    <li>Any misuse, harassment, or suspicious activity may result in suspension or banning from the platform.</li>
+                </ul>
+
+                <h5>5. Limitation of Liability</h5>
+                <ul>
+                    <li>The Lost & Found System is a free service, and we are not responsible for any disputes, losses, or damages arising from its use.</li>
+                </ul>
+
+                <div class="form-check mt-3">
+                    <input type="checkbox" id="agreeTerms" class="form-check-input">
+                    <label for="agreeTerms" class="form-check-label">
+                        I have read and agree to the Terms & Conditions
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="proceedButton" class="btn btn-primary" disabled>Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trigger Terms Modal on Page Load -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var termsModal = new bootstrap.Modal(document.getElementById("termsModal"), {
+            backdrop: "static",
+            keyboard: false
+        });
+        termsModal.show();
+
+        document.getElementById("agreeTerms").addEventListener("change", function () {
+            document.getElementById("proceedButton").disabled = !this.checked;
+        });
+
+        document.getElementById("proceedButton").addEventListener("click", function () {
+            termsModal.hide();
+            document.getElementById("mainContent").classList.remove("d-none");
+        });
+    });
+</script>
+
+<!-- Main Content Hidden Until Agreement -->
+<div id="mainContent" class="text-center d-none">
     <div class="mt-4">
         <a href="{% url 'upload_item_lost' %}" class="btn btn-primary btn-lg me-3">Report Lost Item</a>
         <a href="{% url 'upload_item_found' %}" class="btn btn-success btn-lg">Report Found Item</a>
-    </div>
-
-    <div class="mt-5">
-        <img src="https://source.unsplash.com/800x400/?lost,found" class="img-fluid rounded shadow" alt="Lost and Found">
     </div>
 </div>
 {% endblock %}

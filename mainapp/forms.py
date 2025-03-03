@@ -39,6 +39,11 @@ class BaseItemForm(forms.ModelForm):
 
 # Subclass for Lost Items
 class ItemLostForm(BaseItemForm):
+    image = forms.ImageField(  
+        required=False,  # ✅ Image is required for lost items  
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+    )
     class Meta(BaseItemForm.Meta):
         model = ItemLost
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import now
@@ -68,6 +68,12 @@ def logout(request):
     messages.success(request, "You have been logged out.")
     return redirect('home')
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import ItemLost, CustomUser
+from .forms import ItemLostForm
+from .utils import  store_image_features, get_user_location
+
 @login_required(login_url='login')
 def upload_item_lost(request):
     """Handles uploading lost items."""
@@ -75,24 +81,20 @@ def upload_item_lost(request):
         form = ItemLostForm(request.POST, request.FILES)
         if form.is_valid():
             item = form.save(commit=False)  # Prevent immediate saving
-            # item.user = CustomUser.objects.get(id=request.user.id)  # Assign the logged-in user
-            item.user = get_object_or_404(CustomUser, id=request.user.id)
-            print(type(request.user))  # Check if it’s <class 'mainapp.models.CustomUser'> or <class 'django.contrib.auth.models.User'>
-
+            item.user = get_object_or_404(CustomUser, id=request.user.id)  # Assign logged-in user
 
             item.save()
 
-
-            # Auto-generate a description if none is provided
-            if not item.description:
+            # **Generate a description only if no description was provided**
+            if not item.description and item.image:
                 item.description = generate_ai_description(item.image.path)
-                
                 item.save()
 
-            # Store image features for search
-            store_image_features(item.image.path)
+            # **Store image features only if an image is uploaded**
+            if item.image:
+                store_image_features(item.image.path)
 
-            # If "Auto Location" was clicked
+            # **Handle auto-location feature**
             if "auto_location" in request.POST:
                 lat, lon, address = get_user_location()
                 if lat and lon:
@@ -105,7 +107,9 @@ def upload_item_lost(request):
 
     else:
         form = ItemLostForm()
+    
     return render(request, 'mainapp/upload_lost.html', {'form': form})
+
 
 @login_required(login_url='login')
 def upload_item_found(request):
@@ -116,7 +120,7 @@ def upload_item_found(request):
             item = form.save(commit=False)  # Prevent immediate saving
             item.user = get_object_or_404(CustomUser, id=request.user.id)
   # Assign the logged-in user
-            print(type(request.user))  # Check if it’s <class 'mainapp.models.CustomUser'> or <class 'django.contrib.auth.models.User'>
+            print(type(request.user))  # Check if it's <class 'mainapp.models.CustomUser'> or <class 'django.contrib.auth.models.User'>
 
             item.save()
 
@@ -143,9 +147,19 @@ def upload_item_found(request):
         form = ItemFoundForm()
     return render(request, 'mainapp/upload_found.html', {'form': form})
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+from .models import ItemLost, ItemFound
+from .utils import search_similar_images, compute_text_similarity, calculate_distance
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
 @login_required(login_url='login')
 def match_items(request, item_id, item_type):
     """Matches lost items with found items."""
+    
     if item_type == 'lost':
         item = get_object_or_404(ItemLost, id=item_id)
         opposite_items = ItemFound.objects.filter(status="Open")
@@ -156,12 +170,25 @@ def match_items(request, item_id, item_type):
     matches = []
 
     for match in opposite_items:
-        image_indices, img_distances = search_similar_images(item.image.path)
+        img_score = 0  # Default image score
+
+        if item.image and match.image:
+            image_indices, img_distances = search_similar_images(item.image.path)
+            if img_distances is not None and len(img_distances) > 0:
+                img_score = (1 - img_distances[0])  # Normalize score
+
+        # Text similarity score (0 to 1)
         text_score = compute_text_similarity(item.description, match.description)
-        location_score = 1 / (1 + calculate_distance(item.latitude, item.longitude, match.latitude, match.longitude))
+
+        # Location similarity score (normalized)
+        if item.latitude and item.longitude and match.latitude and match.longitude:
+            distance = calculate_distance(item.latitude, item.longitude, match.latitude, match.longitude)
+            location_score = 1 / (1 + distance)  # Normalize to 0-1 scale
+        else:
+            location_score = 0  # Default if no location data
 
         # Weighted scoring system (image: 50%, text: 30%, location: 20%)
-        overall_score = (1 - img_distances[0]) * 0.5 + text_score * 0.3 + location_score * 0.2
+        overall_score = img_score * 0.5 + text_score * 0.3 + location_score * 0.2
 
         matches.append({
             "match": match,
@@ -171,7 +198,12 @@ def match_items(request, item_id, item_type):
     # Sort matches by highest score
     matches = sorted(matches, key=lambda x: x["score"], reverse=True)
 
+    # ✅ Fix: Ensure the function always returns a response
+    if not matches:
+        return HttpResponse("No matching items found.", content_type="text/plain")
+
     return render(request, 'mainapp/matches.html', {'item': item, 'matches': matches})
+
 
 @login_required(login_url='login')
 def resolve_item(request, item_id, item_type):
