@@ -468,5 +468,3 @@ def get_user_location(lat,lan):
 # #     except Exception as e:
 # #         print(f"Error in detect_item_type: {e}")
 # #         return "Unknown Item"
-
-

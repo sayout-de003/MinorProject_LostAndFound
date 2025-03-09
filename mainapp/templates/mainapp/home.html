@@ -1,72 +1,102 @@
 {% extends "mainapp/base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="text-center">
-    <h1 class="mb-4">Welcome to the Lost & Found System</h1>
-    <p class="lead">Easily report lost or found items and find matches instantly!</p>
+<div class="container text-center mt-5 animate-fade-in">
+    <h1 class="fw-bold text-primary">Welcome to the Lost & Found System</h1>
+    <p class="lead text-muted">Easily report lost or found items and find matches instantly!</p>
 
-    <div class="mt-5">
-        <img src="https://source.unsplash.com/800x400/?lost,found" class="img-fluid rounded shadow" alt="Lost and Found">
+    <!-- Hero Section with Improved Overlay -->
+    <div class="position-relative mt-4 rounded overflow-hidden">
+        <img src="{% static 'lostandfound.png' %}" alt="Lost and Found" class="img-fluid rounded shadow-lg animate-scale-in" style="width: 300px; height: auto; object-fit: cover;">
     </div>
 </div>
 
 <!-- Terms and Conditions Modal -->
-<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+<div class="modal fade animate-modal" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="termsModalLabel">Terms & Conditions</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Welcome to the Lost & Found System. Before using our platform to report or search for lost and found items, please read and agree to the following terms:</p>
+                <p class="text-muted">Before using our platform, please review and agree to the following terms:</p>
 
-                <h5>1. User Responsibilities</h5>
-                <ul>
-                    <li>You must provide accurate and truthful information when reporting lost or found items.</li>
-                    <li>Misuse of the platform, including false reporting, misleading claims, or fraudulent activity, is strictly prohibited.</li>
-                    <li>Any images or descriptions uploaded must not contain offensive, illegal, or inappropriate content.</li>
-                </ul>
+                <div class="accordion animate-accordion" id="termsAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                1. User Responsibilities
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <ul class="list-unstyled terms-list">
+                                    <li>✔ Provide accurate and truthful information.</li>
+                                    <li>✔ Avoid false reporting or misleading claims.</li>
+                                    <li>✔ Upload appropriate images and descriptions.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-                <h5>2. Privacy & Data Usage</h5>
-                <ul>
-                    <li>The information you provide (excluding sensitive personal data) may be publicly visible to help users locate lost items.</li>
-                    <li>We do not sell or share your personal data with third parties, except as required by law.</li>
-                </ul>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                2. Privacy & Data Usage
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <ul class="list-unstyled terms-list">
+                                    <li>✔ Public visibility for item-related information.</li>
+                                    <li>✔ No sale or sharing of personal data.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-                <h5>3. No Guarantee of Recovery</h5>
-                <ul>
-                    <li>While our platform helps connect people with lost or found items, we do not guarantee successful recovery.</li>
-                    <li>We are not responsible for any lost, found, or exchanged items outside of our system.</li>
-                </ul>
-
-                <h5>4. User Conduct</h5>
-                <ul>
-                    <li>Respectful communication is expected at all times.</li>
-                    <li>Any misuse, harassment, or suspicious activity may result in suspension or banning from the platform.</li>
-                </ul>
-
-                <h5>5. Limitation of Liability</h5>
-                <ul>
-                    <li>The Lost & Found System is a free service, and we are not responsible for any disputes, losses, or damages arising from its use.</li>
-                </ul>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                3. No Guarantee of Recovery
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <ul class="list-unstyled terms-list">
+                                    <li>✔ We facilitate connections but do not guarantee item recovery.</li>
+                                    <li>✔ Users are responsible for final exchanges.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-check mt-3">
                     <input type="checkbox" id="agreeTerms" class="form-check-input">
-                    <label for="agreeTerms" class="form-check-label">
+                    <label for="agreeTerms" class="form-check-label text-muted">
                         I have read and agree to the Terms & Conditions
                     </label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="proceedButton" class="btn btn-primary" disabled>Proceed</button>
+                <button id="proceedButton" class="btn btn-primary btn-lg shadow-sm animate-button" disabled>Proceed</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Trigger Terms Modal on Page Load -->
+<!-- Hidden Main Content -->
+<div id="mainContent" class="text-center d-none mt-5 animate-fade-in">
+    <div class="mt-4">
+        <a href="{% url 'upload_item_lost' %}" class="btn btn-danger btn-lg me-3 px-4 shadow-hover animate-button">Report Lost Item</a>
+        <a href="{% url 'upload_item_found' %}" class="btn btn-success btn-lg px-4 shadow-hover animate-button">Report Found Item</a>
+    </div>
+</div>
+
+<!-- JavaScript for Modal Interaction -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var termsModal = new bootstrap.Modal(document.getElementById("termsModal"), {
@@ -82,15 +112,89 @@
         document.getElementById("proceedButton").addEventListener("click", function () {
             termsModal.hide();
             document.getElementById("mainContent").classList.remove("d-none");
+            document.getElementById("mainContent").classList.add("animate-fade-in");
         });
     });
 </script>
 
-<!-- Main Content Hidden Until Agreement -->
-<div id="mainContent" class="text-center d-none">
-    <div class="mt-4">
-        <a href="{% url 'upload_item_lost' %}" class="btn btn-primary btn-lg me-3">Report Lost Item</a>
-        <a href="{% url 'upload_item_found' %}" class="btn btn-success btn-lg">Report Found Item</a>
-    </div>
-</div>
+<!-- Custom Styles with Animations -->
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .text-shadow {
+        text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Hero Section Animation */
+    .animate-fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .animate-scale-in {
+        opacity: 0;
+        transform: scale(0.8);
+        animation: scaleIn 1s ease-out forwards;
+    }
+
+    /* Modal Animation */
+    .animate-modal .modal-content {
+        opacity: 0;
+        transform: scale(0.9);
+        animation: zoomIn 0.5s ease-out forwards;
+    }
+
+    /* Button Animation */
+    .animate-button {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .animate-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Accordion Animation */
+    .animate-accordion .accordion-collapse {
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    /* Keyframes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
 {% endblock %}

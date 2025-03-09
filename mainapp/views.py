@@ -200,7 +200,9 @@ def match_items(request, item_id, item_type):
 
     # ✅ Fix: Ensure the function always returns a response
     if not matches:
-        return HttpResponse("No matching items found.", content_type="text/plain")
+        #return HttpResponse("No matching items found.", content_type="text/plain")
+        return render(request, "mainapp/no_match.html")
+
 
     return render(request, 'mainapp/matches.html', {'item': item, 'matches': matches})
 

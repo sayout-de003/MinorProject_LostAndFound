@@ -1,9 +1,79 @@
 {% extends 'mainapp/base.html' %}
 {% block content %}
-<h2>Sign Up</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-</form>
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 border-0 rounded-lg">
+        <h2 class="text-center text-primary mb-4">Create an Account</h2>
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                <div class="invalid-feedback">Please enter a valid username.</div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.contact_number.label_tag }}
+                {{ form.contact_number }}
+                <div class="invalid-feedback">Please enter a valid contact number.</div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.profile_picture.label_tag }}
+                {{ form.profile_picture }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                <div class="invalid-feedback">Password must be at least 8 characters long.</div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                <div class="invalid-feedback">Passwords must match.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 shadow-hover">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 500px;
+    }
+    .shadow-hover:hover {
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<script>
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 {% endblock %}
