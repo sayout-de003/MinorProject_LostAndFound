@@ -1,0 +1,13 @@
+{% extends 'mainapp/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Confirm Resolution</h2>
+    <p>Are you sure you want to mark "{{ item.title }}" as resolved? This will remove it from your active items.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Resolve</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

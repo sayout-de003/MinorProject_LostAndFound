@@ -1,0 +1,86 @@
+{% extends 'mainapp/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Your Profile</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Profile Information and Update Form -->
+    <div class="row">
+        <div class="col-md-4">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle" alt="Profile Picture" style="max-width: 200px;">
+            {% else %}
+               
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lost Items Section -->
+    <h2 class="mt-5">Your Lost Items</h2>
+    {% if lost_items %}
+        <div class="row">
+            {% for item in lost_items %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text">{{ item.description|truncatewords:20 }}</p>
+                            <p class="card-text"><small class="text-muted">Status: {{ item.status }}</small></p>
+                            <p class="card-text"><small class="text-muted">Posted: {{ item.created_at|date }}</small></p>
+                            {% if item.status == 'Open' %}
+                                <a href="{% url 'update_item_status' item.id 'lost' %}" class="btn btn-warning btn-sm">Mark as Resolved</a>
+                            {% endif %}
+                            <a href="{% url 'item_detail' item.id %}" class="btn btn-info btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven't reported any lost items yet.</p>
+    {% endif %}
+
+    <!-- Found Items Section -->
+    <h2 class="mt-5">Your Found Items</h2>
+    {% if found_items %}
+        <div class="row">
+            {% for item in found_items %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text">{{ item.description|truncatewords:20 }}</p>
+                            <p class="card-text"><small class="text-muted">Status: {{ item.status }}</small></p>
+                            <p class="card-text"><small class="text-muted">Posted: {{ item.created_at|date }}</small></p>
+                            {% if item.status == 'Open' %}
+                                <a href="{% url 'update_item_status' item.id 'found' %}" class="btn btn-warning btn-sm">Mark as Resolved</a>
+                            {% endif %}
+                            <a href="{% url 'item_detail' item.id %}" class="btn btn-info btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven't reported any found items yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -17,6 +17,59 @@ def home(request):
     return render(request, 'mainapp/home.html')
 
 
+
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import ProfileUpdateForm
+from .models import ItemLost, ItemFound
+
+@login_required(login_url='login')
+def profile(request):
+    """Handles user profile viewing and updating."""
+    user = request.user
+    
+    # Get user's lost and found items
+    lost_items = ItemLost.objects.filter(user=user).order_by('-created_at')
+    found_items = ItemFound.objects.filter(user=user).order_by('-created_at')
+    
+    if request.method == "POST":
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('profile')
+        else:
+            messages.error(request, "Error updating profile. Please check the form.")
+    else:
+        form = ProfileUpdateForm(instance=user)
+    
+    context = {
+        'form': form,
+        'lost_items': lost_items,
+        'found_items': found_items,
+    }
+    return render(request, 'mainapp/profile.html', context)
+
+@login_required(login_url='login')
+def update_item_status(request, item_id, item_type):
+    """Allows users to mark their items as resolved from profile."""
+    if item_type == 'lost':
+        item = get_object_or_404(ItemLost, id=item_id, user=request.user)
+    else:
+        item = get_object_or_404(ItemFound, id=item_id, user=request.user)
+    
+    if request.method == "POST":
+        item.resolve_item()  # Using the resolve_item method from BaseItem
+        messages.success(request, f"{item.title} has been marked as resolved.")
+        return redirect('profile')
+    
+    return render(request, 'mainapp/confirm_resolve.html', {
+        'item': item,
+        'item_type': item_type
+    })
+
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -257,3 +310,51 @@ def generate_ai_description(image_path):
         description = f"Image Caption: {image_caption}."
 
     return description
+
+
+def item_detail(request, item_id):
+    item = get_object_or_404(ItemLost, id=item_id)  # Or ItemFound
+    return render(request, "mainapp/item_detail.html", {"item": item})
+
+
+from django.db.models import Q
+from django.shortcuts import render
+from .models import ItemLost, ItemFound
+
+from itertools import chain
+from django.db.models import Q
+from django.shortcuts import render
+
+@login_required(login_url='login')
+def search_items(request):
+    """Allows users to search for lost or found items using filters."""
+    
+    query = request.GET.get("query", "")
+    category = request.GET.get("category", "")
+    location = request.GET.get("location", "")
+    sort_by = request.GET.get("sort_by", "date")  # Default sorting by date
+
+    # Retrieve all lost and found items separately
+    lost_items = ItemLost.objects.filter(status="Open")
+    found_items = ItemFound.objects.filter(status="Open")
+
+    # Convert querysets to lists and merge them
+    items = list(found_items)
+
+    # Apply search filters manually since we are working with lists
+    if query:
+        items = [item for item in items if query.lower() in item.name.lower() or query.lower() in item.description.lower()]
+    
+    if category:
+        items = [item for item in items if item.category == category]
+    
+    if location:
+        items = [item for item in items if location.lower() in item.address.lower()]
+
+    # Sorting logic
+    if sort_by == "date":
+        items.sort(key=lambda x: x.created_at, reverse=True)
+    elif sort_by == "location":
+        items.sort(key=lambda x: x.distance_from_user())  # Ensure this function is defined
+
+    return render(request, "mainapp/search_results.html", {"items": items, "query": query})

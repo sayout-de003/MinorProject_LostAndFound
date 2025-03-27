@@ -37,3 +37,5 @@ class ItemFoundAdmin(BaseItemAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(ItemLost, ItemLostAdmin)
 admin.site.register(ItemFound, ItemFoundAdmin)
+
+

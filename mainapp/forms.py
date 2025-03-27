@@ -73,3 +73,19 @@ class LoginForm(forms.Form):
     """Form for user login."""
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+
+# forms.py
+from django import forms
+from .models import CustomUser
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'profile_picture', 'contact_number']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }

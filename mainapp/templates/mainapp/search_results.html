@@ -1,0 +1,36 @@
+{% extends "mainapp/base.html" %}
+{% block content %}
+<h2>Search Results</h2>
+
+<form method="GET" action="{% url 'search_items' %}">
+    <input type="text" name="query" placeholder="Search items..." value="{{ request.GET.query }}">
+    <select name="category">
+        <option value="">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Documents">Documents</option>
+    </select>
+    <input type="text" name="location" placeholder="Enter location" value="{{ request.GET.location }}">
+    <select name="sort_by">
+        <option value="date">Sort by Date</option>
+        <option value="location">Sort by Nearest Location</option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+{% if items %}
+    <ul>
+        {% for item in items %}
+            <li>
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description }}</p>
+                <p>Location: {{ item.address }}</p>
+                <p>Email: {{ item.email }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No matching items found.</p>
+{% endif %}
+{% endblock %}

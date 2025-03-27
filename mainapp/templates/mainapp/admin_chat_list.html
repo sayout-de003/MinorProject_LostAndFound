@@ -1,0 +1,20 @@
+{% extends "mainapp/base.html" %}
+{% block content %}
+<h2>All Chat Messages</h2>
+<table border="1">
+    <tr>
+        <th>Match ID</th>
+        <th>Sender</th>
+        <th>Message</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for chat in chats %}
+    <tr>
+        <td>{{ chat.match_id }}</td>
+        <td>{{ chat.sender.username }}</td>
+        <td>{{ chat.message }}</td>
+        <td>{{ chat.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

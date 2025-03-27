@@ -59,3 +59,5 @@ class ItemLost(BaseItem):
 class ItemFound(BaseItem):
     """Model for found items."""
     matched_item = models.ForeignKey(ItemLost, null=True, blank=True, on_delete=models.SET_NULL)
+
+

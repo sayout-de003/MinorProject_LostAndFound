@@ -1,16 +1,37 @@
 {% extends "mainapp/base.html" %}
 {% block content %}
-<h2>Report Lost Item</h2>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="page-container">
+    <!-- Left Section: Form -->
+    <div class="form-container">
+        <h2>Report Lost Item</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-    <!-- Auto-Fill Buttons -->
-    <button type="button" id="auto-fill-description">Auto-Fill Description</button>
-    <button type="button" id="auto-fill-location">Auto-Fill Location</button>
+            <!-- Auto-Fill Buttons -->
+            <div class="button-group">
+                <button type="button" id="auto-fill-description">Auto-Fill Description</button>
+                <button type="button" id="auto-fill-location">Auto-Fill Location</button>
+            </div>
+            <button type="submit" id="submit-button">Submit</button>
+        </form>
+    </div>
 
-    <button type="submit" id="submit-button">Submit</button>
-</form>
+    <!-- Right Section: Decorative Panel -->
+    <div class="decorative-panel">
+        <div class="panel-content">
+            <h3>Lost Something?</h3>
+            <p>Let us help you find it!</p>
+            <div class="decorative-circles">
+                <span class="circle circle-1"></span>
+                <span class="circle circle-2"></span>
+                <span class="circle circle-3"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
 document.getElementById("auto-fill-description").addEventListener("click", function() {
@@ -84,4 +105,329 @@ document.querySelector("form").addEventListener("submit", function(event) {
     }
 });
 </script>
+
+<style>
+/* Base styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6b48ff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main container */
+.page-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+    flex-wrap: wrap;
+    flex: 1 0 auto;
+}
+
+/* Form container */
+.form-container {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Decorative panel */
+.decorative-panel {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Footer styling */
+.site-footer {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 0;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #6b48ff;
+}
+
+/* Panel content */
+.panel-content {
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+.panel-content h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.panel-content p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Decorative circles */
+.decorative-circles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+    width: 100px;
+    height: 100px;
+    top: 10%;
+    right: 10%;
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 70px;
+    height: 70px;
+    bottom: 15%;
+    left: 15%;
+    animation-delay: 2s;
+}
+
+.circle-3 {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    right: 20%;
+    animation-delay: 4s;
+}
+
+/* Form styling */
+h2 {
+    color: #2a5298;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="file"],
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #6b48ff;
+    box-shadow: 0 0 8px rgba(107, 72, 255, 0.3);
+    outline: none;
+}
+
+/* Button group */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Button styling */
+button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#auto-fill-description {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+    color: white;
+}
+
+#auto-fill-location {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    color: white;
+}
+
+#submit-button {
+    background: linear-gradient(90deg, #2a5298, #6b48ff);
+    color: white;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+#auto-fill-description:hover {
+    background: linear-gradient(90deg, #ff8e53, #ff6b6b);
+}
+
+#auto-fill-location:hover {
+    background: linear-gradient(90deg, #00f2fe, #4facfe);
+}
+
+#submit-button:hover {
+    background: linear-gradient(90deg, #6b48ff, #2a5298);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .page-container {
+        flex-direction: column;
+        margin: 15px;
+    }
+
+    .form-container {
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .decorative-panel {
+        padding: 1.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .footer-links {
+        margin-top: 0.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container, .decorative-panel {
+        padding: 1rem;
+        min-width: 100%;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+
+    #submit-button {
+        margin-top: 0.8rem;
+    }
+
+    .panel-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .panel-content p {
+        font-size: 0.9rem;
+    }
+}
+</style>
 {% endblock %}

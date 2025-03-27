@@ -13,4 +13,10 @@ urlpatterns = [
     path('resolve/<int:item_id>/<str:item_type>/', views.resolve_item, name='resolve_item'),
     path('get-location/', views.get_location, name='get_location'),
     path('generate-description/', views.generate_description, name='generate_description'),
+    path('search/', views.search_items, name='search_items'),
+    path('item/<int:item_id>/', views.item_detail, name='item_detail'),
+    path('profile/', views.profile, name='profile'),
+    path('item/<int:item_id>/<str:item_type>/resolve/', views.update_item_status, name='update_item_status'),
 ]
+   
+
