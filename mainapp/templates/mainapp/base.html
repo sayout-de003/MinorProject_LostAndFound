@@ -35,7 +35,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                         </li>
@@ -43,11 +42,12 @@
                             <a class="nav-link" href="{% url 'upload_item_lost' %}">Report Lost Item</a>
                         </li>
                         <li class="nav-item">
-                            <a class ="nav-link" href="{% url 'search_items' %}">Manual Search</a>
+                            <a class="nav-link" href="{% url 'search_items' %}">Manual Search</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'upload_item_found' %}">Report Found Item</a>
                         </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link btn btn-danger text-white px-3 py-1" href="{% url 'logout' %}">Logout</a>
                         </li>

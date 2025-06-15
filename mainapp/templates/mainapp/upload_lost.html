@@ -31,8 +31,6 @@
     </div>
 </div>
 
-
-
 <script>
 document.getElementById("auto-fill-description").addEventListener("click", function() {
     const imageInput = document.querySelector("input[type='file']");
@@ -95,7 +93,7 @@ document.getElementById("auto-fill-location").addEventListener("click", function
     }
 });
 
-// Ensure form submission works without an image
+// Ensure form submission works with optional fields
 document.querySelector("form").addEventListener("submit", function(event) {
     const descriptionField = document.querySelector("textarea") || document.querySelector("input[name='description']");
 

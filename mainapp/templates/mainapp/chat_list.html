@@ -1,0 +1,29 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Your Chats</h2>
+    {% if chat_list %}
+        <div class="list-group">
+            {% for chat in chat_list %}
+                <a href="{% url 'chat_room' request.user.id chat.other_user.id %}" 
+                   class="list-group-item list-group-item-action {% if chat.unread %}list-group-item-warning{% endif %}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ chat.other_user.username }}</h5>
+                        <small>{{ chat.timestamp|date:"M d, H:i" }}</small>
+                    </div>
+                    <p class="mb-1">{{ chat.last_message|truncatechars:50 }}</p>
+                    {% if chat.unread %}
+                        <span class="badge bg-primary rounded-pill">Unread</span>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p>No chats yet. Start a conversation from a match!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

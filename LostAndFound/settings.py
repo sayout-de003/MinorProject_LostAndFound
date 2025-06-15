@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "channels",
-    "mainapp"
+    "mainapp",
+    
     
 ]
 
@@ -71,6 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "LostAndFound.wsgi.application"
+ASGI_APPLICATION = 'LostAndFound.asgi.application'
 
 
 # Database
@@ -157,3 +159,12 @@ GOOGLE_MAPS_API_KEY  = os.environ.get('GMAPS_API_KEY"')
 AUTH_USER_MODEL = 'mainapp.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}

@@ -12,9 +12,9 @@ class BaseItemForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter item title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Provide a description'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
-            'latitude': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'longitude': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'address': forms.TextInput(attrs={'class': 'form-control', 'readonly': True, 'placeholder': 'Auto-filled address'}),
+            'latitude': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter latitude (optional)'}),
+            'longitude': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter longitude (optional)'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter or edit address'}),
         }
 
     image = forms.ImageField(
@@ -40,7 +40,7 @@ class BaseItemForm(forms.ModelForm):
 # Subclass for Lost Items
 class ItemLostForm(BaseItemForm):
     image = forms.ImageField(  
-        required=False,  # ✅ Image is required for lost items  
+        required=False,  # Image is optional for lost items
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
         widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'})
     )
@@ -89,3 +89,13 @@ class ProfileUpdateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+from django import forms
+from .models import ChatMessage
+
+
+class ChatMessageForm(forms.ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ['message', 'image', 'video']  # Include the new fields        

@@ -1,36 +1,101 @@
-{% extends "mainapp/base.html" %}
-{% block content %}
-<h2>Private Chat between {{ finder.username }} and {{ owner.username }}</h2>
-<div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid black; padding: 10px;">
-    {% for msg in messages %}
-        <p><strong>{{ msg.sender.username }}:</strong> {{ msg.message }} <small>({{ msg.timestamp }})</small></p>
-    {% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f1f1;
+            padding: 20px;
+        }
+        #chat-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        #chat-message-input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        #chat-message-submit {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .sender {
+            font-weight: bold;
+            color: #333;
+        }
+        .own-message {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Chat with {{ receiver.username }}</h2>
+
+<div id="chat-box">
+    <!-- Messages will appear here -->
 </div>
 
-<input type="text" id="message-input" placeholder="Type a message..." />
-<button id="send-button">Send</button>
+<input id="chat-message-input" type="text" placeholder="Type your message..." autocomplete="off">
+<button id="chat-message-submit">Send</button>
 
 <script>
     const roomName = "{{ room_name }}";
-    const senderId = "{{ request.user.id }}";
-    const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/" + roomName + "/");
+    const currentUser = "{{ request.user.username }}";
+    const receiver = "{{ receiver.username }}";
 
-    socket.onmessage = function (e) {
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        const chatBox = document.getElementById("chat-box");
-
-        const senderText = data.sender_id == senderId ? "You" : "Them";
-        chatBox.innerHTML += `<p><strong>${senderText}:</strong> ${data.message} <small>(${data.timestamp})</small></p>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        if (data.sender === currentUser) {
+            messageDiv.classList.add('own-message');
+        }
+        messageDiv.innerHTML = `<span class="sender">${data.sender}:</span> ${data.message}`;
+        document.getElementById('chat-box').appendChild(messageDiv);
+        document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
     };
 
-    document.getElementById("send-button").onclick = function () {
-        const messageInput = document.getElementById("message-input");
-        const message = messageInput.value;
-        if (message.trim()) {
-            socket.send(JSON.stringify({ message: message }));
-            messageInput.value = "";
+    document.getElementById('chat-message-input').focus();
+    document.getElementById('chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {
+            document.getElementById('chat-message-submit').click();
+        }
+    };
+
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.getElementById('chat-message-input');
+        const message = messageInputDom.value;
+        if (message.trim() !== '') {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'sender': currentUser,
+                'receiver': receiver,
+            }));
+            messageInputDom.value = '';
         }
     };
 </script>
-{% endblock %}
+
+</body>
+</html>

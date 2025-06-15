@@ -17,6 +17,9 @@ urlpatterns = [
     path('item/<int:item_id>/', views.item_detail, name='item_detail'),
     path('profile/', views.profile, name='profile'),
     path('item/<int:item_id>/<str:item_type>/resolve/', views.update_item_status, name='update_item_status'),
+    #path('chat/<int:user_id>/', views.chat_view, name='chat_view'),
+    path('chat/<str:room_name>/<int:receiver_id>/', views.chat_view, name='chat_view'),
+
 ]
    
 
