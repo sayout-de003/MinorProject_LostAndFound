@@ -1,45 +1,45 @@
-asgiref==3.8.1
-certifi==2025.1.31
-channels==4.2.0
-charset-normalizer==3.4.1
-clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
-Django==5.1.6
-django-ratelimit==4.1.0
-faiss-cpu==1.10.0
-filelock==3.17.0
-fsspec==2025.2.0
-ftfy==6.3.1
-geographiclib==2.0
-geopy==2.4.1
-googlemaps==4.10.0
-huggingface-hub==0.29.1
-idna==3.10
-Jinja2==3.1.5
-joblib==1.4.2
-MarkupSafe==3.0.2
-mpmath==1.3.0
-networkx==3.4.2
-numpy==2.2.3
-opencv-python==4.11.0.86
-packaging==24.2
-pillow==11.1.0
-pytesseract==0.3.13
-PyYAML==6.0.2
-regex==2024.11.6
-requests==2.32.3
-safetensors==0.5.2
-scikit-learn==1.6.1
-scipy==1.15.2
-sentence-transformers==3.4.1
-setuptools==75.8.0
-sqlparse==0.5.3
-sympy==1.13.1
-threadpoolctl==3.5.0
-tokenizers==0.21.0
-torch==2.6.0
-torchvision==0.21.0
-tqdm==4.67.1
-transformers==4.49.0
-typing_extensions==4.12.2
-urllib3==2.3.0
-wcwidth==0.2.13
+asgiref==3.8.1              # ASGI utilities for async Django
+certifi==2025.1.31          # SSL certificates for HTTPS requests
+channels==4.2.0             # WebSockets/async support in Django
+charset-normalizer==3.4.1   # Text encoding detection/normalization
+clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1 # OpenAI CLIP for image–text embeddings
+Django==5.1.6               # Web framework
+django-ratelimit==4.1.0     # Rate limiting requests in Django
+faiss-cpu==1.10.0           # Fast vector similarity search
+filelock==3.17.0            # File locking for safe access
+fsspec==2025.2.0            # File system interface (local/remote)
+ftfy==6.3.1                 # Fixes text encoding issues
+geographiclib==2.0          # Geodesic calculations
+geopy==2.4.1                # Geocoding and distance calculation
+googlemaps==4.10.0          # Google Maps API client
+huggingface-hub==0.29.1     # Access Hugging Face models
+idna==3.10                  # International domain name handling
+Jinja2==3.1.5               # Template engine
+joblib==1.4.2               # Parallel computing utilities
+MarkupSafe==3.0.2           # Safe string handling for templates
+mpmath==1.3.0               # Mathematical functions
+networkx==3.4.2             # Graph algorithms
+numpy==2.2.3                # Numerical computing
+opencv-python==4.11.0.86    # Computer vision library
+packaging==24.2             # Version parsing/packaging utils
+pillow==11.1.0              # Image processing
+pytesseract==0.3.13         # OCR via Tesseract
+PyYAML==6.0.2               # YAML config parsing
+regex==2024.11.6            # Advanced regex
+requests==2.32.3            # HTTP requests
+safetensors==0.5.2          # Safe tensor storage format
+scikit-learn==1.6.1         # Machine learning algorithms
+scipy==1.15.2               # Scientific computing
+sentence-transformers==3.4.1 # Embeddings & semantic similarity
+setuptools==75.8.0          # Python packaging utilities
+sqlparse==0.5.3             # SQL parsing (used by Django)
+sympy==1.13.1               # Symbolic mathematics
+threadpoolctl==3.5.0        # Control thread pools in libraries
+tokenizers==0.21.0          # Fast text tokenization
+torch==2.6.0                # PyTorch deep learning
+torchvision==0.21.0         # Computer vision for PyTorch
+tqdm==4.67.1                # Progress bars
+transformers==4.49.0        # NLP/vision transformer models
+typing_extensions==4.12.2   # Backports for typing features
+urllib3==2.3.0              # HTTP client for requests
+wcwidth==0.2.13             # Text width calculation in terminals

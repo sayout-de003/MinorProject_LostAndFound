@@ -70,7 +70,7 @@ class BaseItem(models.Model):
     def resolve_item(self):
         self.status = "Resolved"
         self.save()
-        self.delete()
+        # self.delete()
 
     def __str__(self):
         return f"{self.title} ({self.status})"
